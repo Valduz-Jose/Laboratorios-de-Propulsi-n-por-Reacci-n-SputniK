@@ -1,0 +1,131 @@
+#include <iostream>
+#include <string.h>
+#include <fstream>
+#include <vector>
+#include<stdlib.h>
+#include<cmath>
+#include<iomanip>
+using namespace std;
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+int main(int argc, char** argv) {
+	
+	string nombreArchivo = "estrellas.in";
+    ifstream archivo(nombreArchivo.c_str());
+    string linea,text;
+    getline(archivo,text);
+    string espacios=" ";
+    cout<<text<<endl;
+    vector<string> numeros{};
+	//primera linea
+    size_t pos = 0;
+    while ((pos = text.find(espacios)) != string::npos) {
+        numeros.push_back(text.substr(0, pos));
+        text.erase(0, pos + espacios.length());
+    }
+   /* for (const auto &str : numeros) {
+        cout << str << endl;
+    }*/
+	cout<<"Filas " <<numeros[0]<<endl;//filas
+	cout<<"Columnas " <<numeros[1]<<endl;//Columnas
+	int filas=stoi(numeros[0]),columnas=stoi(numeros[1]);
+    int MD[filas+2][columnas+2];
+    int num;
+	double expresion=0.0,circundante=0;
+    bool estrella=false;
+	
+    if(filas<10||columnas<10){// filas y columnas deben ser menores que 10
+    
+	    for(int fil=0; fil<=filas+1;fil++){//para leer cada linea del documento
+	    num=0;
+		    vector<string> numerosMD{};
+			size_t pos = 0;
+			if(fil>0){
+				getline(archivo,text);
+			    while ((pos = text.find(espacios)) != string::npos) {
+			        numerosMD.push_back(text.substr(0, pos));
+			        text.erase(0, pos + espacios.length());
+			    }
+			   
+			}
+			    	
+			
+			
+		    
+		    for(int col=0;col<=columnas+1;col++){//cargo el vector con todos los datos
+		    	if(fil==0||col==0||fil==filas+1||col==columnas+1){
+		    		MD[fil][col]=0;	
+				}
+				else if(fil!=0||col!=0){
+					
+					MD[fil][col]=stoi(numerosMD[num]);	
+			    	if(MD[fil][col]>0){
+			    		/*circundante=(MD[fil][col]+MD[fil-1][col-1]+MD[fil-1][col]+MD[fil-1][col+1]+MD[fil][col-1]+MD[fil][col+1]+MD[fil+1][col-1]+MD[fil+1][col]+MD[fil+1][col+1]);
+						if(circundante<180&&circundante>0){
+							cout<<"Circundante=  "<<circundante;	
+						}*/
+						
+					}
+					num++;
+				}
+				
+				cout<<" "<<left<<setw(2)<<MD[fil][col];
+				
+			}
+			
+			cout<<endl;
+		}
+		cout<<"CIRCUNDANTES"<<endl;
+		char MatrizFinal[filas+2][columnas+2];
+	//calcular estrellas
+	for(int i=0; i<=filas+1; i++){
+		for(int j=0;j<=columnas+1;j++){
+			if(i==0||j==0||i==filas+1||j==columnas+1){
+		    	circundante=0;
+		    	if(i==0&&j==0||i==0&&j==columnas+1||i==filas+1&&j==0||i==filas+1&&j==columnas+1){
+		    		MatrizFinal[i][j]=32;
+				}else
+				if(i==0||i==filas+1){
+					MatrizFinal[i][j]=48+j;
+				}else
+				if(j==0||j==columnas+1){
+					MatrizFinal[i][j]=48+i;
+				}
+		   	//	MatrizFinal[i][j]=49+i;	
+		   	
+			cout<<left<<setw(2)<<MatrizFinal[i][j];
+			}else{
+				circundante=(MD[i][j]+MD[i-1][j-1]+MD[i-1][j]+MD[i-1][j+1]+MD[i][j-1]+MD[i][j+1]+MD[i+1][j-1]+MD[i+1][j]+MD[i+1][j+1]);
+				if(circundante<180&&circundante>0){
+					expresion=circundante/5;
+					if(expresion>10.0){
+						
+						MatrizFinal[i][j]='*';
+						cout<<left<<setw(2)<<MatrizFinal[i][j];		
+					}else{
+						
+						MatrizFinal[i][j]=' ';
+						cout<<left<<setw(2)<<MatrizFinal[i][j];
+					}
+					
+				}
+			}
+			
+		}
+		cout<<endl;
+	}
+	}else{
+		cout<<"Los Rangos superan el Valor de la Matriz"<<endl;
+	}
+	    	
+	
+	
+	return 0;
+}
+/* for(int i=0; i <filas; i++){
+	    	for(int j=0; j<columnas; j++){
+					//cout<<" x";
+			}
+			cout<<endl;
+		}*/
